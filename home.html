@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home</title>
+</head>
+<body>
+  <h2>Welcome to the PPT Submission Portal</h2>
+  
+  <div id="userInfo"></div>
+  <div id="menu"></div>
+
+  <script type="module">
+    import { auth } from './js/firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const userInfo = document.getElementById("userInfo");
+    const menu = document.getElementById("menu");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userInfo.innerHTML = `<p>Logged in as: ${user.email}</p>`;
+
+        // Check if the user is a faculty or student
+        const facultyEmail = user.email.split('@')[1];  // Simplified check (you may add better validation here)
+
+        if (facultyEmail === "faculty.edu") { // Replace with your faculty domain if needed
+          menu.innerHTML = `<a href="faculty.html">View Student PPTs</a>`;
+        } else {
+          menu.innerHTML = `<a href="upload.html">Upload Your PPT</a>`;
+        }
+      } else {
+        userInfo.innerHTML = "<p>You are not logged in. Please login first.</p>";
+        menu.innerHTML = "<a href='index.html'>Login</a>";
+      }
+    });
+  </script>
+</body>
+</html>
