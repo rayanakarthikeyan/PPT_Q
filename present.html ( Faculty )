@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Presenter</title></head>
+<body>
+  <h2>Presentation Queue</h2>
+  <button id="prev">Previous</button>
+  <button id="next">Next</button>
+  <div id="frame"></div>
+  <script type="module" src="assets/app.js"></script>
+  <script type="module" src="assets/present.js"></script>
+</body></html>
