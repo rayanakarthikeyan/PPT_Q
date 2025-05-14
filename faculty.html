@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Faculty PPT Viewer</title>
+</head>
+<body>
+  <h2>Your Class PPTs</h2>
+  <div id="pptList"></div>
+
+  <script type="module">
+    import { auth, db } from './js/firebase.js';
+    import { collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const pptList = document.getElementById("pptList");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const q = query(
+          collection(db, "submissions"),
+          where("facultyEmail", "==", user.email),
+          orderBy("uploadedAt", "asc")
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          pptList.innerHTML = "<p>No PPTs uploaded yet.</p>";
+          return;
+        }
+
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const link = document.createElement("a");
+          link.href = data.fileURL;
+          link.textContent = `Student: ${data.studentEmail} | File: ${data.fileName}`;
+          link.target = "_blank";
+          pptList.appendChild(link);
+          pptList.appendChild(document.createElement("br"));
+        });
+      } else {
+        pptList.innerHTML = "<p>Please login as faculty to view your PPTs.</p>";
+      }
+    });
+  </script>
+</body>
+</html>
