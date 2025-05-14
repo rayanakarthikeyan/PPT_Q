@@ -24,20 +24,15 @@ const firebaseConfig = {
   measurementId: "G-1C6L4P33XR"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Expose to global scope if needed
-window.auth = auth;
-window.db = db;
-
 // Signup
 document.getElementById("signupBtn")?.addEventListener("click", async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const role = document.querySelector('input[name="role"]:checked')?.value || "student"; // default to student
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+  const role = document.querySelector('input[name="role"]:checked')?.value || "student";
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -49,7 +44,7 @@ document.getElementById("signupBtn")?.addEventListener("click", async () => {
     });
 
     alert("Signup successful");
-    window.location.href = "index.html"; // redirect to login
+    window.location.href = "index.html"; // back to login
   } catch (error) {
     alert(error.message);
   }
@@ -57,19 +52,18 @@ document.getElementById("signupBtn")?.addEventListener("click", async () => {
 
 // Login
 document.getElementById("loginBtn")?.addEventListener("click", async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    alert("Login successful");
-    // redirection happens in onAuthStateChanged below
+    // redirect handled in onAuthStateChanged
   } catch (error) {
     alert(error.message);
   }
 });
 
-// Redirect after login based on role
+// Role-based redirect
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
