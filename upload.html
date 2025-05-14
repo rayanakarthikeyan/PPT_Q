@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload PPT</title>
+</head>
+<body>
+  <h2>Upload Your PPT</h2>
+  <input type="file" id="pptFile" accept=".ppt,.pptx" /><br><br>
+  <input type="text" id="facultyId" placeholder="Faculty Email ID" /><br><br>
+  <button id="uploadBtn">Upload</button>
+
+  <script type="module">
+    import { auth, storage, db } from './js/firebase.js';
+    import { getDownloadURL, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    import { addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const uploadBtn = document.getElementById("uploadBtn");
+
+    uploadBtn.addEventListener("click", async () => {
+      const file = document.getElementById("pptFile").files[0];
+      const facultyId = document.getElementById("facultyId").value;
+
+      if (!file || !facultyId) {
+        alert("Please select a file and enter faculty email ID.");
+        return;
+      }
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const fileRef = ref(storage, `ppts/${facultyId}/${Date.now()}_${file.name}`);
+          await uploadBytes(fileRef, file);
+          const fileURL = await getDownloadURL(fileRef);
+
+          await addDoc(collection(db, "submissions"), {
+            studentEmail: user.email,
+            facultyEmail: facultyId,
+            fileName: file.name,
+            fileURL: fileURL,
+            uploadedAt: serverTimestamp()
+          });
+
+          alert("PPT uploaded successfully!");
+        } else {
+          alert("Please login to upload.");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
