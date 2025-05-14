@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Upload PPT</title></head>
+<body>
+  <h2>Upload Your Presentation</h2>
+  <form id="uploadForm">
+    <input type="text" id="topic" placeholder="Topic" required>
+    <input type="file" id="ppt" accept=".ppt,.pptx" required>
+    <button type="submit">Upload</button>
+  </form>
+  <h3>Your Past Uploads</h3>
+  <ul id="myList"></ul>
+  <script type="module" src="assets/app.js"></script>
+  <script type="module" src="assets/upload.js"></script>
+</body></html>
