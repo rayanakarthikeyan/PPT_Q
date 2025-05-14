@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PPT Queue - Login</title>
+  <title>PPT Queue - Student Login</title>
 </head>
 <body>
-  <h1>PPT Queue Login</h1>
+  <h2>Student Login / Signup</h2>
 
   <!-- Login Form -->
   <div id="login-form">
@@ -24,10 +24,16 @@
     <p>Already have an account? <button id="showLogin">Login</button></p>
   </div>
 
+  <!-- Include Firebase auth -->
   <script type="module" src="js/firebase.js"></script>
+
+  <!-- Login/Signup logic -->
   <script type="module">
     import { auth } from './js/firebase.js';
-    import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
@@ -40,24 +46,16 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Login Successful");
-        })
-        .catch((error) => {
-          alert("Login Failed: " + error.message);
-        });
+        .then(() => alert("Login successful!"))
+        .catch((error) => alert("Login failed: " + error.message));
     });
 
     signupBtn.addEventListener('click', () => {
       const email = document.getElementById('signup-email').value;
       const password = document.getElementById('signup-password').value;
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Signup Successful");
-        })
-        .catch((error) => {
-          alert("Signup Failed: " + error.message);
-        });
+        .then(() => alert("Signup successful!"))
+        .catch((error) => alert("Signup failed: " + error.message));
     });
 
     showSignup.addEventListener('click', () => {
