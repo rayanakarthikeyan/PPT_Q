@@ -3,70 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PPT Queue - Student Login</title>
+  <title>Login & Signup</title>
 </head>
 <body>
-  <h2>Student Login / Signup</h2>
+  <h2>Signup</h2>
+  <input type="email" id="signupEmail" placeholder="Email"><br>
+  <input type="password" id="signupPassword" placeholder="Password"><br>
 
-  <!-- Login Form -->
-  <div id="login-form">
-    <input type="email" id="email" placeholder="Email" required /><br>
-    <input type="password" id="password" placeholder="Password" required /><br>
-    <button id="loginBtn">Login</button>
-    <p>Don't have an account? <button id="showSignup">Sign Up</button></p>
-  </div>
+  <!-- Role selection -->
+  <label><input type="radio" name="role" value="student" checked> Student</label>
+  <label><input type="radio" name="role" value="faculty"> Faculty</label><br>
 
-  <!-- Signup Form -->
-  <div id="signup-form" style="display:none;">
-    <input type="email" id="signup-email" placeholder="Email" required /><br>
-    <input type="password" id="signup-password" placeholder="Password" required /><br>
-    <button id="signupBtn">Sign Up</button>
-    <p>Already have an account? <button id="showLogin">Login</button></p>
-  </div>
+  <button id="signupBtn">Sign Up</button>
 
-  <!-- Include Firebase auth -->
+  <h2>Login</h2>
+  <input type="email" id="loginEmail" placeholder="Email"><br>
+  <input type="password" id="loginPassword" placeholder="Password"><br>
+  <button id="loginBtn">Login</button>
+
   <script type="module" src="js/firebase.js"></script>
-
-  <!-- Login/Signup logic -->
-  <script type="module">
-    import { auth } from './js/firebase.js';
-    import {
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
-    const showSignup = document.getElementById('showSignup');
-    const showLogin = document.getElementById('showLogin');
-
-    loginBtn.addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => alert("Login successful!"))
-        .catch((error) => alert("Login failed: " + error.message));
-    });
-
-    signupBtn.addEventListener('click', () => {
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => alert("Signup successful!"))
-        .catch((error) => alert("Signup failed: " + error.message));
-    });
-
-    showSignup.addEventListener('click', () => {
-      loginForm.style.display = "none";
-      signupForm.style.display = "block";
-    });
-
-    showLogin.addEventListener('click', () => {
-      signupForm.style.display = "none";
-      loginForm.style.display = "block";
-    });
-  </script>
 </body>
 </html>
